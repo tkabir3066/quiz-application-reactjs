@@ -1,5 +1,5 @@
 function shuffle(quiz) {
-  const answers = [quiz.correct_answer, ...quiz.incorrect_answer];
+  const answers = [quiz.correct_answer, ...quiz.incorrect_answers];
 
   for (let i = answers.length; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));

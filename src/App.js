@@ -8,6 +8,14 @@ const App = () => {
   const [startQuiz, setStartQuiz] = useState(false);
   const [currentAnswers, setCurrentAnswers] = useState(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
+  const navigateNext = () => {
+    setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+    const question = quizzes[currentQuestionIndex];
+
+    setCurrentAnswers(shuffle(question));
+    console.log("navigate Next");
+  };
   const fetchQuiz = async () => {
     const res = await fetch(
       "https://opentdb.com/api.php?amount=10&category=18&type=multiple"
@@ -36,6 +44,9 @@ const App = () => {
           <QuestionCard
             quiz={quizzes[currentQuestionIndex]}
             currentAnswers={currentAnswers}
+            currentQuestionIndex={currentQuestionIndex}
+            quizzes={quizzes}
+            navigateNext={navigateNext}
           />
         )}
       </div>
