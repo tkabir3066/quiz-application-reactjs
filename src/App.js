@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import QuestionCard from "./QuestionCard";
+import shuffle from "./utils";
 
 const App = () => {
   const [quizzes, setQuizzes] = useState(null);
@@ -16,15 +17,15 @@ const App = () => {
 
     // getting all answers
 
-    const initialQuestionIndex = results[currentQuestionIndex];
-    const answers = [
-      initialQuestionIndex.correct_answer,
-      ...initialQuestionIndex.incorrect_answers,
-    ];
+    const initialQuestion = results[currentQuestionIndex];
+    // const answers = [
+    //   initialQuestion.correct_answer,
+    //   ...initialQuestion.incorrect_answers,
+    // ];
     setQuizzes(results);
     setLoaded(true);
     setStartQuiz(true);
-    setCurrentAnswers(answers);
+    setCurrentAnswers(shuffle(initialQuestion));
     // console.log(results);
   };
   return (
