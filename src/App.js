@@ -7,13 +7,19 @@ const App = () => {
   const [loaded, setLoaded] = useState(false);
   const [startQuiz, setStartQuiz] = useState(false);
   const [currentAnswers, setCurrentAnswers] = useState(null);
+  const [endGame, setEndGame] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
   const navigateNext = () => {
-    setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
-    const question = quizzes[currentQuestionIndex];
-
-    setCurrentAnswers(shuffle(question));
+    const currentQuizIndex = currentQuestionIndex + 1;
+    const validQuestionIndex = currentQuizIndex < quizzes.length;
+    if (validQuestionIndex) {
+      setCurrentQuestionIndex(currentQuizIndex);
+      const question = quizzes[currentQuizIndex];
+      setCurrentAnswers(shuffle(question));
+    } else {
+      setEndGame(true);
+    }
     console.log("navigate Next");
   };
   const fetchQuiz = async () => {
@@ -38,9 +44,10 @@ const App = () => {
   };
   return (
     <>
+      {endGame && <p>Its time to show result</p>}
       {!startQuiz && <button onClick={fetchQuiz}>Start Quiz</button>}
       <div className="container">
-        {loaded && (
+        {loaded && !endGame && (
           <QuestionCard
             quiz={quizzes[currentQuestionIndex]}
             currentAnswers={currentAnswers}
