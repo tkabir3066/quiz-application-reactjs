@@ -6,6 +6,9 @@ const QuestionCard = ({
   currentQuestionIndex,
   quizzes,
   navigateNext,
+  pickAnswer,
+  correctAnswer,
+  pickedAnswer,
 }) => {
   return (
     <div className="question-card">
@@ -14,7 +17,13 @@ const QuestionCard = ({
       </p>
       <h3>{quiz.question}</h3>
       {currentAnswers.map((answer, index) => (
-        <AnswerCard key={index} answer={answer} />
+        <AnswerCard
+          answer={answer}
+          key={index}
+          pickAnswer={pickAnswer}
+          correctAnswer={correctAnswer}
+          pickedAnswer={pickedAnswer}
+        />
       ))}
 
       <button onClick={navigateNext}>Next</button>

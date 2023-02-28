@@ -9,6 +9,17 @@ const App = () => {
   const [currentAnswers, setCurrentAnswers] = useState(null);
   const [endGame, setEndGame] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [totalScore, setTotalScore] = useState(0);
+  const [correctAnswer, setCorrectAnswer] = useState(null);
+  const [pickedAnswer, setPickedAnswer] = useState(null);
+
+  const pickAnswer = (answer) => {
+    setPickedAnswer(answer);
+    if (answer === correctAnswer) {
+      setTotalScore((prevScore) => prevScore + 1);
+    }
+    // console.log(answer);
+  };
 
   const navigateNext = () => {
     const currentQuizIndex = currentQuestionIndex + 1;
@@ -17,11 +28,16 @@ const App = () => {
       setCurrentQuestionIndex(currentQuizIndex);
       const question = quizzes[currentQuizIndex];
       setCurrentAnswers(shuffle(question));
+
+      //reset picked answer
+      setPickedAnswer(null);
+      //setting correct answer on question navigation
+      setCorrectAnswer(question.correct_answer);
     } else {
       setEndGame(true);
     }
-    console.log("navigate Next");
   };
+
   const fetchQuiz = async () => {
     const res = await fetch(
       "https://opentdb.com/api.php?amount=10&category=18&type=multiple"
@@ -40,12 +56,22 @@ const App = () => {
     setLoaded(true);
     setStartQuiz(true);
     setCurrentAnswers(shuffle(initialQuestion));
+    setCorrectAnswer(initialQuestion.correct_answer);
     // console.log(results);
   };
   return (
     <>
       {endGame && <p>Its time to show result</p>}
-      {!startQuiz && <button onClick={fetchQuiz}>Start Quiz</button>}
+      {!startQuiz && (
+        <div>
+          <button
+            onClick={fetchQuiz}
+            style={{ display: "block", margin: "200px auto" }}
+          >
+            Start Quiz
+          </button>
+        </div>
+      )}
       <div className="container">
         {loaded && !endGame && (
           <QuestionCard
@@ -54,6 +80,9 @@ const App = () => {
             currentQuestionIndex={currentQuestionIndex}
             quizzes={quizzes}
             navigateNext={navigateNext}
+            pickAnswer={pickAnswer}
+            correctAnswer={correctAnswer}
+            pickedAnswer={pickedAnswer}
           />
         )}
       </div>
