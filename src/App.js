@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import QuestionCard from "./QuestionCard";
+import ScoreCard from "./ScoreCard";
 import shuffle from "./utils";
 
 const App = () => {
@@ -38,6 +39,17 @@ const App = () => {
     }
   };
 
+  const resetQuiz = () => {
+    setQuizzes(null);
+    setLoaded(false);
+    setCurrentAnswers(null);
+    setCorrectAnswer(null);
+    setEndGame(false);
+    setStartQuiz(false);
+    setPickedAnswer(null);
+    setTotalScore(0);
+    setCurrentQuestionIndex(0);
+  };
   const fetchQuiz = async () => {
     const res = await fetch(
       "https://opentdb.com/api.php?amount=10&category=18&type=multiple"
@@ -60,33 +72,31 @@ const App = () => {
     // console.log(results);
   };
   return (
-    <>
-      {endGame && <p>Its time to show result</p>}
+    <div className="container">
+      {endGame && <ScoreCard totalScore={totalScore} resetQuiz={resetQuiz} />}
       {!startQuiz && (
-        <div>
-          <button
-            onClick={fetchQuiz}
-            style={{ display: "block", margin: "200px auto" }}
-          >
-            Start Quiz
-          </button>
-        </div>
+        <button
+          className="start-quiz"
+          onClick={fetchQuiz}
+          style={{ display: "block", margin: "200px auto" }}
+        >
+          Start Quiz
+        </button>
       )}
-      <div className="container">
-        {loaded && !endGame && (
-          <QuestionCard
-            quiz={quizzes[currentQuestionIndex]}
-            currentAnswers={currentAnswers}
-            currentQuestionIndex={currentQuestionIndex}
-            quizzes={quizzes}
-            navigateNext={navigateNext}
-            pickAnswer={pickAnswer}
-            correctAnswer={correctAnswer}
-            pickedAnswer={pickedAnswer}
-          />
-        )}
-      </div>
-    </>
+
+      {loaded && !endGame && (
+        <QuestionCard
+          quiz={quizzes[currentQuestionIndex]}
+          currentAnswers={currentAnswers}
+          currentQuestionIndex={currentQuestionIndex}
+          quizzes={quizzes}
+          navigateNext={navigateNext}
+          pickAnswer={pickAnswer}
+          correctAnswer={correctAnswer}
+          pickedAnswer={pickedAnswer}
+        />
+      )}
+    </div>
   );
 };
 
